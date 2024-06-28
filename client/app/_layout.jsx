@@ -1,19 +1,43 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Slot, Stack } from "expo-router";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "./redux/store";
-import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
-import { setToken } from "./redux/features/user/userSlice";
+import { setToken, setUserData } from "./redux/features/user/userSlice";
+import { getData } from "../lib/storage";
 
 // const useInitializeToken = () => {
 
-const RootLayout = () => {
-  // useInitializeToken();
+const InitializeAuth = () => {
+  const dispatch = useDispatch();
 
+  const { status } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const fetchAuthData = async () => {
+      const storedToken = await getData("token");
+      const userData = await getData("userData");
+
+      if (storedToken) {
+        dispatch(setToken(storedToken));
+      }
+
+      if (userData) {
+        dispatch(setUserData(userData));
+      }
+    };
+
+    fetchAuthData();
+  }, [dispatch]);
+
+  return null;
+};
+
+const RootLayout = () => {
   return (
     <Provider store={store}>
+      <InitializeAuth />
       <Slot />
     </Provider>
   );

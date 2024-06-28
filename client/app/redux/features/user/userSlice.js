@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-import { useEffect } from "react";
+import { removeData, storeData } from "../../../../lib/storage";
 
 const API_URL = "http://192.168.0.29:3000";
 
@@ -13,6 +13,8 @@ export const loginUser = createAsyncThunk(
         username,
         password,
       });
+      await storeData("token", response.data.token);
+      await storeData("userData", response.data.user);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -20,17 +22,13 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-const token = SecureStore.getItemAsync("token")
-  ? SecureStore.getItem("token")
-  : null;
-
 export const userSlice = createSlice({
   name: "user",
   initialState: {
     firstName: null,
     lastName: null,
     username: null,
-    token,
+    token: null,
     status: "idle",
     error: null,
   },
@@ -42,10 +40,16 @@ export const userSlice = createSlice({
       state.token = null;
       state.status = "idle";
       state.error = null;
-      SecureStore.deleteItemAsync("token");
+      removeData("token");
+      removeData("userData");
     },
     setToken: (state, action) => {
       state.token = action.payload;
+    },
+    setUserData: (state, action) => {
+      //   state.firstName = action.payload.firstName;
+      //   state.lastName = action.payload.lastName;
+      state.username = action.payload.username;
     },
   },
   extraReducers: (builder) => {
@@ -57,7 +61,6 @@ export const userSlice = createSlice({
         state.status = "succeeded";
         state.username = action.payload.user.username;
         state.token = action.payload.token;
-        SecureStore.setItemAsync("token", action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
@@ -66,6 +69,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout, setToken } = userSlice.actions;
+export const { logout, setToken, setUserData } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -17,7 +17,6 @@ import CustomButton from "../../components/button/CustomButton";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const statusBarHeight = StatusBar.currentHeight;
-
   const { username } = useSelector((state) => state.user);
 
   const handleLogOut = () => {
