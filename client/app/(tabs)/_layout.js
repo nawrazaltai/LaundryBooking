@@ -1,6 +1,7 @@
-import { Redirect, Tabs } from "expo-router";
+import { Redirect, Tabs, Stack } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { Text, View } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function TabLayout() {
   //   const dispatch = useDispatch();
@@ -11,9 +12,35 @@ export default function TabLayout() {
   }
 
   return (
-    <Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: "" }}>
-      <Tabs.Screen name="index" options={{ title: "Hem" }} />
-      <Tabs.Screen name="times" options={{ title: "Tider" }} />
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: "orange",
+        tabBarStyle: { paddingTop: 8 },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Hem",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons size={30} name="home" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="times"
+        options={{
+          title: "Tvättider",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              size={30}
+              name="washing-machine"
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

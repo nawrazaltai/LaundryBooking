@@ -2,7 +2,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  StatusBar,
+  StatusBar as StatBar,
   SafeAreaView,
   Platform,
 } from "react-native";
@@ -13,10 +13,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Greeting from "../../components/greeting/Greeting";
 import Icon from "react-native-vector-icons/Ionicons";
 import CustomButton from "../../components/button/CustomButton";
+import { Link } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const statusBarHeight = StatusBar.currentHeight;
+  const statusBarHeight = StatBar.currentHeight + 10;
   const { username } = useSelector((state) => state.user);
 
   const handleLogOut = () => {
@@ -25,23 +27,29 @@ const Dashboard = () => {
 
   return (
     <SafeAreaProvider>
+      <StatusBar style="light" />
+
       <SafeAreaView
-        className="flex-1 bg-base"
+        className="flex-1 bg-primary"
         style={{
-          marginTop: Platform.OS == "android" ? statusBarHeight : 0,
+          paddingTop: Platform.OS == "android" ? statusBarHeight : 0,
         }}
       >
-        <View className="flex-row items-center justify-between px-5 border-b border-b-neutral-400 pb-3">
+        <View className="flex-row items-center justify-between px-5 pb-5">
           <Greeting username={username} />
-          <Icon name="person-circle-outline" size={44} color={"gray"} />
+          <Link href={"/../profile"} asChild>
+            <Icon name="person-circle-outline" size={44} color={"#F5F5F5"} />
+          </Link>
         </View>
 
-        <CustomButton
-          onPress={handleLogOut}
-          styles="mt-5 bg-red-500 items-center py-2.5 rounded-md"
-        >
-          <Text>Logga ut</Text>
-        </CustomButton>
+        <View className="flex-1 bg-base rounded-t-2xl">
+          {/* <CustomButton
+            onPress={handleLogOut}
+            styles="mt-5 bg-red-500 items-center py-2.5 rounded-md"
+          >
+            <Text>Logga ut</Text>
+          </CustomButton> */}
+        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );

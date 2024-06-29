@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Slot, Stack } from "expo-router";
+import { Redirect, Slot, Stack } from "expo-router";
 import { Provider, useSelector } from "react-redux";
 import { store } from "./redux/store";
 import { useDispatch } from "react-redux";
@@ -9,7 +9,7 @@ import { getData } from "../lib/storage";
 
 // const useInitializeToken = () => {
 
-const InitializeAuth = () => {
+const InitialLayout = () => {
   const dispatch = useDispatch();
 
   const { status } = useSelector((state) => state.user);
@@ -31,21 +31,36 @@ const InitializeAuth = () => {
     fetchAuthData();
   }, [dispatch]);
 
-  return null;
+  if (status === "loading") {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size={"large"} color={"gray"} />
+      </View>
+    );
+  }
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen
+        name="profile"
+        options={{
+          animation: "slide_from_right",
+          presentation: "card",
+        }}
+      />
+    </Stack>
+  );
+
+  // <Slot />;
 };
 
 const RootLayout = () => {
   return (
     <Provider store={store}>
-      <InitializeAuth />
-      <Slot />
+      <InitialLayout />
     </Provider>
   );
 };
 
 export default RootLayout;
-
-// Works instead of <Slot/>
-// <Stack screenOptions={{ headerShown: false }}>
-//  <Stack.Screen name="(tabs)" />
-// </Stack>

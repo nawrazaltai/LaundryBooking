@@ -1,21 +1,18 @@
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Alert,
-  TextInput,
   Platform,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Image,
-  ScrollView,
   Keyboard,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, setToken } from "./redux/features/user/userSlice";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import InputField from "../components/input/InputField";
 import CustomButton from "../components/button/CustomButton";

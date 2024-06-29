@@ -44,7 +44,9 @@ export const userSlice = createSlice({
       removeData("userData");
     },
     setToken: (state, action) => {
+      state.status = "loading";
       state.token = action.payload;
+      state.status = "idle";
     },
     setUserData: (state, action) => {
       //   state.firstName = action.payload.firstName;

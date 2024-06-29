@@ -36,14 +36,14 @@ const Greeting = ({ username }) => {
 
   return (
     <View className="flex flex-row items-center">
-      <Icon name={icon} size={38} color="#4D4C7D" />
+      <Icon name={icon} size={38} color="#F5F5F5" />
 
       <View className="ml-2.5">
-        <Text className="text-lg text-secondary font-bold">
+        <Text className="text-lg text-white font-bold">
           {greeting}, {username}
         </Text>
         <View>
-          <Text className="text-secondary font-light">{formattedDate}</Text>
+          <Text className="text-white font-light">{formattedDate}</Text>
         </View>
       </View>
     </View>

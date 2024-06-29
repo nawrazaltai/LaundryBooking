@@ -8,6 +8,10 @@ const SECRET_KEY = "LaundryTest";
 
 app.use(bodyParser.json());
 
+// app.use((req, res, next) => {
+//   setTimeout(next, 3000); // 3 seconds delay
+// });
+
 app.post("/login", (req, res) => {
   const user = { id: "1", username: "test", password: "123" };
   const { username, password } = req.body;
