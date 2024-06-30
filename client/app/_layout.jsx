@@ -31,13 +31,13 @@ const InitialLayout = () => {
     fetchAuthData();
   }, [dispatch]);
 
-  if (status === "loading") {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size={"large"} color={"gray"} />
-      </View>
-    );
-  }
+  // if (status === "loading") {
+  //   return (
+  //     <View className="flex-1 items-center justify-center">
+  //       <ActivityIndicator size={"large"} color={"gray"} />
+  //     </View>
+  //   );
+  // }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

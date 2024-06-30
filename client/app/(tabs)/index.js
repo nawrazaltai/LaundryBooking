@@ -19,7 +19,9 @@ import { StatusBar } from "expo-status-bar";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const statusBarHeight = StatBar.currentHeight + 10;
-  const { username } = useSelector((state) => state.user);
+  const { username, firstName, lastName } = useSelector(
+    (state) => state.user.user
+  );
 
   const handleLogOut = () => {
     dispatch(logout());
@@ -43,12 +45,12 @@ const Dashboard = () => {
         </View>
 
         <View className="flex-1 bg-base rounded-t-2xl">
-          {/* <CustomButton
+          <CustomButton
             onPress={handleLogOut}
             styles="mt-5 bg-red-500 items-center py-2.5 rounded-md"
           >
             <Text>Logga ut</Text>
-          </CustomButton> */}
+          </CustomButton>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>

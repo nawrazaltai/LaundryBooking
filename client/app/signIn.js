@@ -19,7 +19,7 @@ import CustomButton from "../components/button/CustomButton";
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.user);
+  const { token, status } = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -93,6 +93,7 @@ const SignIn = () => {
             <CustomButton
               styles={"w-full bg-accent py-3.5 items-center rounded-md"}
               onPress={handleLogin}
+              status={status}
             >
               <Text className="text-[#363062] font-bold text-base">
                 Logga in
