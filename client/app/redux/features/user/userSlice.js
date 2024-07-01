@@ -9,7 +9,7 @@ export const loginUser = createAsyncThunk(
   "user/login",
   async ({ username, password }, thunkAPI) => {
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         username,
         password,
       });
@@ -35,7 +35,7 @@ export const getUser = createAsyncThunk(
         return thunkAPI.rejectWithValue({ error: "Token not found" });
       }
 
-      const response = await axios.get(`${API_URL}/users/${userId}`, {
+      const response = await axios.get(`${API_URL}/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
