@@ -38,7 +38,7 @@ const Dashboard = () => {
         }}
       >
         <View className="flex-row items-center justify-between px-5 pb-5">
-          <Greeting username={username} />
+          <Greeting username={firstName} />
           <Link href={"/../profile"} asChild>
             <Icon name="person-circle-outline" size={44} color={"#F5F5F5"} />
           </Link>

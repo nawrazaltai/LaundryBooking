@@ -25,7 +25,9 @@ export const login = async (req, res) => {
       SECRET_KEY
     );
 
-    res.json({ token, user });
+    const { password: userPassword, ...userToReturn } = user.toObject();
+
+    res.json({ token, user: userToReturn });
   } catch (error) {
     console.error("Login error", error);
     res.status(500).json({ error: "Ett oväntat fel inträffade" });

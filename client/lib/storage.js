@@ -12,13 +12,11 @@ export const storeData = async (key, value) => {
 export const getData = async (key) => {
   try {
     const jsonValue = await SecureStore.getItemAsync(key);
-    // console.log("JSON", jsonValue);
     if (jsonValue) {
       return JSON.parse(jsonValue);
     } else {
       return null;
     }
-    //   return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.error("Fetching data error", e);
   }

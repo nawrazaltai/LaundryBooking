@@ -55,6 +55,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     user: {
+      _id: null,
       firstName: null,
       lastName: null,
       username: null,
@@ -78,8 +79,6 @@ export const userSlice = createSlice({
       state.status = "idle";
     },
     setUserData: (state, action) => {
-      //   state.firstName = action.payload.firstName;
-      //   state.lastName = action.payload.lastName;
       state.user = action.payload;
     },
   },
@@ -90,7 +89,6 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // state.username = action.payload.user.username;
         state.user = action.payload.user;
         state.token = action.payload.token;
       })
@@ -105,8 +103,7 @@ export const userSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action.payload;
-        console.log(action.payload);
+        state.user = action.payload.user;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.status = "failed";

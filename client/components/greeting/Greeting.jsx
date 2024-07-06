@@ -39,7 +39,7 @@ const Greeting = ({ username }) => {
       <Icon name={icon} size={38} color="#F5F5F5" />
 
       <View className="ml-2.5">
-        <Text className="text-lg text-white font-bold">
+        <Text className="text-base text-white font-bold">
           {greeting}, {username}
         </Text>
         <View>

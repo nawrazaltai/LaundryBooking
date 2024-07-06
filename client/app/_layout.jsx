@@ -11,11 +11,14 @@ import { getData } from "../lib/storage";
 
 const InitialLayout = () => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
-  const { status } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
+  // console.log(user);
 
   useEffect(() => {
     const fetchAuthData = async () => {
+      setLoading(true);
       const storedToken = await getData("token");
       const userData = await getData("userData");
 
@@ -26,10 +29,19 @@ const InitialLayout = () => {
       if (userData) {
         dispatch(setUserData(userData));
       }
+      setLoading(false);
     };
 
     fetchAuthData();
   }, [dispatch]);
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size={"large"} color={"gray"} />
+      </View>
+    );
+  }
 
   // if (status === "loading") {
   //   return (
