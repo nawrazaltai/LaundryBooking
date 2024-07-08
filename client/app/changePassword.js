@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   KeyboardAvoidingView,
   ScrollView,
   Text,
@@ -11,12 +10,12 @@ import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import CustomInput from "../components/input/CustomInput";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { getData } from "../lib/storage";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { API_URL } from "../lib/constants";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/button/CustomButton";
 
 const ChangePassword = ({}) => {
