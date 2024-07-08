@@ -61,6 +61,13 @@ const InitialLayout = () => {
           presentation: "card",
         }}
       />
+      <Stack.Screen
+        name="changePassword"
+        options={{
+          animation: "slide_from_bottom",
+          // presentation: "modal",
+        }}
+      />
     </Stack>
   );
 

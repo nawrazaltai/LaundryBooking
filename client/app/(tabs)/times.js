@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const Times = () => {
   const { user } = useSelector((state) => state.user);
+  console.log(user);
 
   return (
     <SafeAreaProvider className="flex-1 items-center justify-center">

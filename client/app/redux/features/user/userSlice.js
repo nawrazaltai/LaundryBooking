@@ -2,8 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { getData, removeData, storeData } from "../../../../lib/storage";
-
-const API_URL = "http://192.168.0.29:3000";
+import { API_URL } from "../../../../lib/constants";
 
 export const loginUser = createAsyncThunk(
   "user/login",
@@ -25,31 +24,31 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk(
-  "users/userId",
-  async (userId, thunkAPI) => {
-    try {
-      const token = await getData("token");
+// export const getUser = createAsyncThunk(
+//   "users/userId",
+//   async (userId, thunkAPI) => {
+//     try {
+//       const token = await getData("token");
 
-      if (!token) {
-        return thunkAPI.rejectWithValue({ error: "Token not found" });
-      }
+//       if (!token) {
+//         return thunkAPI.rejectWithValue({ error: "Token not found" });
+//       }
 
-      const response = await axios.get(`${API_URL}/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+//       const response = await axios.get(`${API_URL}/user/${userId}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
 
-      //   const { user } = response.data;
-      //   await storeData("token", token);
-      //   await storeData("userData", user);
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
-);
+//       //   const { user } = response.data;
+//       //   await storeData("token", token);
+//       //   await storeData("userData", user);
+//       return response.data;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.response.data);
+//     }
+//   }
+// );
 
 export const userSlice = createSlice({
   name: "user",
@@ -59,6 +58,7 @@ export const userSlice = createSlice({
       firstName: null,
       lastName: null,
       username: null,
+      apartmentNumber: null,
     },
     token: null,
     status: "idle",
@@ -97,18 +97,18 @@ export const userSlice = createSlice({
         state.error = action.payload.error;
       });
 
-    builder
-      .addCase(getUser.pending, (state) => {
-        state.status.loading;
-      })
-      .addCase(getUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.user = action.payload.user;
-      })
-      .addCase(getUser.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload.error;
-      });
+    // builder
+    //   .addCase(getUser.pending, (state) => {
+    //     state.status.loading;
+    //   })
+    //   .addCase(getUser.fulfilled, (state, action) => {
+    //     state.status = "succeeded";
+    //     state.user = action.payload.user;
+    //   })
+    //   .addCase(getUser.rejected, (state, action) => {
+    //     state.status = "failed";
+    //     state.error = action.payload.error;
+    //   });
   },
 });
 
