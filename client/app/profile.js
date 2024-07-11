@@ -23,6 +23,7 @@ import { getData } from "../lib/storage";
 import CustomButton from "../components/button/CustomButton";
 import { API_URL } from "../lib/constants";
 import CustomInput from "../components/input/CustomInput";
+import { logout } from "./redux/features/user/userSlice";
 
 const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
   return (
@@ -51,49 +52,11 @@ const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
 
 const Profile = () => {
   const dispatch = useDispatch();
-  // const [isEditing, setIsEditing] = useState(false);
-  // const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { _id, username, firstName, lastName, apartmentNumber } = useSelector(
     (state) => state.user.user
   );
-
-  // const { token } = useSelector((state) => state.user)
-  // const { user } = useSelector((state) => state.user);
-
-  // useEffect(() => {
-  //   const getUser = async (_id) => {
-  //     setLoading(true);
-  //     try {
-  //       const token = await getData("token");
-
-  //       if (!token) {
-  //         return Alert.alert({ error: "Token not found" });
-  //       }
-
-  //       const response = await axios.get(`${API_URL}/user/${_id}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-
-  //       // setCurrentPassword(response.data.user.password);
-  //     } catch (error) {
-  //       console.log(error.response.data);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   getUser(_id);
-  // }, [_id]);
-
-  // useEffect(() => {
-  //   if (password) {
-  //     reset((prevValues) => ({ ...prevValues, password: password }));
-  //   }
-  // }, [password]);
 
   const {
     control,
@@ -108,6 +71,10 @@ const Profile = () => {
   const onSubmit = (data) => {
     console.log(data);
     // reset({ username: data.username });
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -168,12 +135,8 @@ const Profile = () => {
                 </Text>
 
                 <View className="flex flex-row items-center justify-between bg-gray-50 p-2.5 rounded-md">
-                  <Link
-                    // password={currentPassword}
-                    href={"/changePassword"}
-                    asChild
-                  >
-                    <TouchableOpacity className="flex flex-1 flex-row justify-between">
+                  <Link href={"/changePassword"} asChild>
+                    <CustomButton styles="flex flex-1 flex-row justify-between">
                       <View className="flex-row  items-center">
                         <Text className="text-base font-medium">
                           Hantera lösenord
@@ -185,12 +148,23 @@ const Profile = () => {
                         />
                       </View>
                       <Icon name="lock" size={25} color={"black"} />
-                    </TouchableOpacity>
+                    </CustomButton>
                   </Link>
                 </View>
               </View>
             </View>
           </ScrollView>
+          <View className="w-full px-4 bottom-0 absolute">
+            <CustomButton
+              onPress={handleLogout}
+              styles="flex-row items-center justify-center bg-red-500 p-3 rounded-md w-full items-center"
+            >
+              <Icon name="logout" color="#FFF" size={20} />
+              <Text className="text-white pl-2 font-medium text-base">
+                Logga ut
+              </Text>
+            </CustomButton>
+          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </SafeAreaProvider>

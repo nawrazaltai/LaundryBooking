@@ -37,11 +37,15 @@ const CustomInput = ({
       rules={rules}
       render={({
         field: { onChange, onBlur, value },
-        fieldState: { error },
+        fieldState: { error, invalid },
       }) => (
         <View>
           <Text className="text-gray-600 font-bold text-sm pb-1">{label}</Text>
-          <View className="flex flex-row items-center border border-gray-300 justify-between bg-gray-50 p-2.5 rounded-md">
+          <View
+            className={`flex flex-row items-center border border-gray-300 justify-between bg-gray-50 p-2.5 rounded-md focus:border-accent ${
+              invalid && "border-red-500"
+            }`}
+          >
             <TextInput
               className="flex text-black text-base  flex-1"
               value={value}

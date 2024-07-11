@@ -38,7 +38,7 @@ const ChangePassword = ({}) => {
       newPassword: "",
       confirmPassword: "",
     },
-    mode: "all",
+    mode: "onTouched",
   });
 
   const onSubmit = (data) => {

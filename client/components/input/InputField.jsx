@@ -15,7 +15,7 @@ const InputField = ({ placeholder, secure, icon, onChangeText, value }) => {
         value={value}
         secureTextEntry={showPassword}
         placeholderTextColor={"#FFF"}
-        className="pl-2.5 pb-0.5 text-base flex-1 text-[#FFF] placeholder:font-light focus:text-white font-medium"
+        className="pl-2.5 pb-0.5 text-base flex-1 text-[#FFF] placeholder:font-light focus:text-white  font-medium"
       />
       {secure && (
         <TouchableOpacity className="ml-auto">

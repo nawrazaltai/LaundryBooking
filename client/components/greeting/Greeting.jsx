@@ -15,11 +15,11 @@ const formatDateToSwedish = (date) => {
 const Greeting = ({ username }) => {
   const [greeting, setGreeting] = useState("");
   const [icon, setIcon] = useState("");
-  const date = new Date();
+  const [date, setDate] = useState(new Date());
 
   const formattedDate = formatDateToSwedish(date);
 
-  useEffect(() => {
+  const updateGreeting = () => {
     const currentHour = new Date().getHours();
 
     if (currentHour < 12) {
@@ -32,6 +32,56 @@ const Greeting = ({ username }) => {
       setGreeting("God kväll");
       setIcon("moon");
     }
+  };
+
+  useEffect(() => {
+    updateGreeting();
+    const now = new Date();
+    const hours = now.getHours();
+    let nextUpdate;
+
+    if (hours < 12) {
+      nextUpdate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        12,
+        0,
+        0,
+        0
+      );
+    } else if (hours < 18) {
+      nextUpdate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        18,
+        0,
+        0,
+        0
+      );
+    } else {
+      nextUpdate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+        0,
+        0,
+        0,
+        0
+      );
+    }
+
+    // console.log("Updated");
+    const timeToNextUpdate = nextUpdate - now;
+
+    const timeout = setTimeout(() => {
+      updateGreeting();
+    }, timeToNextUpdate);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, []);
 
   return (

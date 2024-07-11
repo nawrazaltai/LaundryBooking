@@ -1,6 +1,7 @@
 import {
   Text,
   TouchableOpacity,
+  Image,
   View,
   StatusBar as StatBar,
   SafeAreaView,
@@ -8,24 +9,19 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../redux/features/user/userSlice";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Greeting from "../../components/greeting/Greeting";
 import Icon from "react-native-vector-icons/Ionicons";
 import CustomButton from "../../components/button/CustomButton";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import joy from "../../assets/joy.png";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const statusBarHeight = StatBar.currentHeight + 10;
-  const { username, firstName, lastName } = useSelector(
-    (state) => state.user.user
-  );
-
-  const handleLogOut = () => {
-    dispatch(logout());
-  };
+  const { firstName } = useSelector((state) => state.user.user);
+  const times = [];
 
   return (
     <SafeAreaProvider>
@@ -44,13 +40,28 @@ const Dashboard = () => {
           </Link>
         </View>
 
-        <View className="flex-1 bg-base rounded-t-2xl">
-          <CustomButton
-            onPress={handleLogOut}
-            styles="mt-5 bg-red-500 items-center py-2.5 rounded-md"
-          >
-            <Text>Logga ut</Text>
-          </CustomButton>
+        <View className="flex-1 bg-white rounded-t-2xl items-center">
+          {!times.length && (
+            <View className="my-auto items-center">
+              <Image source={joy} className="w-[300px] h-[300px]" />
+              <Text className="text-base font-light tracking-wider mt-[-20px]">
+                Du har inga bokade tvättider
+              </Text>
+
+              <Link href="times" asChild>
+                <CustomButton styles="flex-row items-center justify-center mt-2.5 gap-x-2">
+                  <Text className="text-accent text-lg font-bold ">
+                    Boka tvättid nu
+                  </Text>
+                  <Icon
+                    name="arrow-forward-outline"
+                    color={"#F99417"}
+                    size={20}
+                  />
+                </CustomButton>
+              </Link>
+            </View>
+          )}
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
