@@ -134,30 +134,24 @@ const Profile = () => {
                   Lösenord
                 </Text>
 
-                <View className="flex flex-row items-center justify-between bg-gray-50 p-2.5 rounded-md">
-                  <Link href={"/changePassword"} asChild>
-                    <CustomButton styles="flex flex-1 flex-row justify-between">
-                      <View className="flex-row  items-center">
-                        <Text className="text-base font-medium">
-                          Hantera lösenord
-                        </Text>
-                        <Icon
-                          name="chevron-right"
-                          size={25}
-                          color={"#363062"}
-                        />
-                      </View>
-                      <Icon name="lock" size={25} color={"black"} />
-                    </CustomButton>
-                  </Link>
-                </View>
+                <Link href={"/changePassword"} asChild>
+                  <TouchableOpacity className="flex-1 flex-row items-center justify-between bg-gray-50 p-2.5 rounded-md">
+                    <View className="flex-row  items-center">
+                      <Text className="text-base font-medium">
+                        Hantera lösenord
+                      </Text>
+                      <Icon name="chevron-right" size={25} color={"#363062"} />
+                    </View>
+                    <Icon name="lock" size={25} color={"black"} />
+                  </TouchableOpacity>
+                </Link>
               </View>
             </View>
           </ScrollView>
           <View className="w-full px-4 bottom-0 absolute">
             <CustomButton
               onPress={handleLogout}
-              styles="flex-row items-center justify-center bg-red-500 p-3 rounded-md w-full items-center"
+              styles="flex-row items-center justify-center bg-red-400 p-3 rounded-md w-full items-center"
             >
               <Icon name="logout" color="#FFF" size={20} />
               <Text className="text-white pl-2 font-medium text-base">
@@ -172,36 +166,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-{
-  /* <Controller
-                    control={control}
-                    rules={{
-                      required: "Lösenordet får inte vara tomt.",
-                      minLength: {
-                        value: 8,
-                        message: "Lösenordet måste vara minst 8 karaktärer.",
-                      },
-                    }}
-                    name="password"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <>
-                        <TextInput
-                          className="flex flex-1 text-black text-base"
-                          value={value}
-                          onChangeText={onChange}
-                          onBlur={onBlur}
-                          secureTextEntry={!showPassword}
-                        />
-                        <View className="flex-row gap-x-2">
-                          <TouchableOpacity
-                            onPressIn={() => setShowPassword(true)}
-                            onPressOut={() => setShowPassword(false)}
-                          >
-                            <Icon name="eye" size={25} color={"#363062"} />
-                          </TouchableOpacity>
-                        </View>
-                      </>
-                    )}
-                  /> */
-}

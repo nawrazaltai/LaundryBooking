@@ -15,7 +15,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import CustomButton from "../../components/button/CustomButton";
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import joy from "../../assets/joy.png";
+import joy from "../../assets/joy1.png";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -43,13 +43,17 @@ const Dashboard = () => {
         <View className="flex-1 bg-white rounded-t-2xl items-center">
           {!times.length && (
             <View className="my-auto items-center">
-              <Image source={joy} className="w-[300px] h-[300px]" />
-              <Text className="text-base font-light tracking-wider mt-[-20px]">
+              <Image
+                source={joy}
+                className="w-[400px] h-[290px]"
+                resizeMode="contain"
+              />
+              <Text className="text-base font-light tracking-wider mt-[-35px]">
                 Du har inga bokade tvättider
               </Text>
 
-              <Link href="times" asChild>
-                <CustomButton styles="flex-row items-center justify-center mt-2.5 gap-x-2">
+              <Link href={"/times"} asChild>
+                <TouchableOpacity className="flex-row items-center justify-center mt-2.5 gap-x-2">
                   <Text className="text-accent text-lg font-bold ">
                     Boka tvättid nu
                   </Text>
@@ -58,7 +62,7 @@ const Dashboard = () => {
                     color={"#F99417"}
                     size={20}
                   />
-                </CustomButton>
+                </TouchableOpacity>
               </Link>
             </View>
           )}
