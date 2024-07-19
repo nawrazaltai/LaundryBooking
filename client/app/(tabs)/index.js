@@ -52,7 +52,7 @@ const Dashboard = () => {
                 Du har inga bokade tvättider
               </Text>
 
-              <Link href={"/times"} asChild>
+              <Link href={"/times?initialPage=0"} asChild>
                 <TouchableOpacity className="flex-row items-center justify-center mt-2.5 gap-x-2">
                   <Text className="text-accent text-lg font-bold ">
                     Boka tvättid nu

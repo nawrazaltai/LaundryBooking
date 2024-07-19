@@ -30,6 +30,7 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="times"
+        initialParams={{ initialPage: 0 }}
         options={{
           title: "Tvättider",
           tabBarIcon: ({ color }) => (
@@ -38,6 +39,16 @@ export default function TabLayout() {
               name="washing-machine"
               color={color}
             />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="test"
+        // initialParams={{ initialPage: null }}
+        options={{
+          title: "test",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons size={30} name="calendar" color={color} />
           ),
         }}
       />

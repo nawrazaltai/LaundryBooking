@@ -1,25 +1,14 @@
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  StatusBar as StatBar,
   View,
+  Dimensions,
+  LayoutChangeEvent,
+  TouchableOpacity,
 } from "react-native";
-import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
-import { StatusBar } from "expo-status-bar";
 import PagerView from "react-native-pager-view";
-import {
-  formatDistance,
-  formatDistanceStrict,
-  format,
-  isToday,
-  isTomorrow,
-} from "date-fns";
-import { sv } from "date-fns/locale";
-import { useGlobalSearchParams } from "expo-router";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -31,8 +20,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import "react-native-reanimated";
-import LaundryCalendar from "../../components/times/LaundryCalendar";
 
+// Definiera usePageScrollHandler hook
 function usePageScrollHandler(handlers, dependencies) {
   const { context, doDependenciesDiffer } = useHandler(handlers, dependencies);
   const subscribeForEvents = ["onPageScroll"];
@@ -52,36 +41,31 @@ function usePageScrollHandler(handlers, dependencies) {
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
-const Times = () => {
-  // const { user } = useSelector((state) => state.user);
-
-  const params = useGlobalSearchParams();
-  const { initialPage } = params;
-
+const Test = () => {
   const [containerWidth, setContainerWidth] = useState(0);
   const [tabWidth, setTabWidth] = useState(0);
   const position = useSharedValue(0);
-  const [currentPageIndex, setCurrentPageIndex] = useState(null);
-  const pagerViewRef = useRef(null);
+  //   const pageIndex = useSharedValue(0);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const pagerViewRef = useRef();
 
-  useEffect(() => {
-    position.value = initialPage;
-    setCurrentPageIndex(initialPage);
-  }, [params]);
+  //   useEffect(() => {
+  //     position.value = currentPageIndex;
+  //   }, [currentPageIndex]);
 
+  // Hantera page scroll
   const pageScrollHandler = usePageScrollHandler({
     onPageScroll: (e) => {
       "worklet";
       position.value = e.position + e.offset;
+      //   pageIndex.value = Math.round(e.position + e.offset);
       runOnJS(setCurrentPageIndex)(Math.round(e.position + e.offset));
     },
   });
 
   const indicatorStyle = useAnimatedStyle(() => {
     const indicatorWidth = containerWidth / 2;
-    const translateX = !isNaN(position.value * tabWidth)
-      ? position.value * tabWidth
-      : 0;
+    const translateX = position.value * tabWidth;
 
     return {
       width: indicatorWidth,
@@ -107,9 +91,8 @@ const Times = () => {
   }, []);
 
   return (
-    <SafeAreaProvider className="w-full bg-white">
-      <StatusBar />
-      <SafeAreaView className="flex-1" onLayout={handleContainerLayout}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container} onLayout={handleContainerLayout}>
         <View style={styles.tabContainer}>
           <TouchableOpacity
             className="w-1/2 items-center"
@@ -140,26 +123,24 @@ const Times = () => {
           <Animated.View style={[styles.indicator, indicatorStyle]} />
         </View>
 
-        {initialPage && (
-          <AnimatedPagerView
-            className="flex-1"
-            initialPage={Number(initialPage)}
-            ref={pagerViewRef}
-            onPageScroll={pageScrollHandler}
-          >
-            <LaundryCalendar key="1" />
-
-            <View className="flex-1 items-center justify-center" key="2">
-              <Text>Bokade tider och historik</Text>
-            </View>
-          </AnimatedPagerView>
-        )}
+        <AnimatedPagerView
+          ref={pagerViewRef}
+          onPageScroll={pageScrollHandler}
+          style={styles.pagerView}
+        >
+          <View key="1" style={styles.page}>
+            <Text>Page 1</Text>
+            <Text>{currentPageIndex}</Text>
+          </View>
+          <View key="2" style={styles.page}>
+            <Text>Page 2</Text>
+            <Text>{currentPageIndex}</Text>
+          </View>
+        </AnimatedPagerView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
 };
-
-export default Times;
 
 const styles = StyleSheet.create({
   container: {
@@ -189,26 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// const formatDate = (date) => {
-//   if (isToday(date)) {
-//     console.log("idag");
-//     return;
-//   }
-
-//   if (isTomorrow(date)) {
-//     console.log("imorgon");
-//     return;
-//   }
-
-//   console.log(
-//     formatDistanceStrict(new Date(date), new Date(), {
-//       addSuffix: true,
-//       unit: "day",
-//       locale: sv,
-//     })
-//   );
-// };
-
-// useEffect(() => {
-//   formatDate("2024-07-21");
-// }, []);
+export default Test;
