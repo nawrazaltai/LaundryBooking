@@ -8,6 +8,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
+import { format, parseISO } from "date-fns";
+import { sv } from "date-fns/locale";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 LocaleConfig.locales["sv"] = {
   monthNames: [
@@ -90,9 +93,7 @@ const LaundryCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toLocaleDateString()
   );
-  const [day, setDay] = useState("Idag");
-  const [month, setMonth] = useState(convertMonth(new Date().getMonth()));
-  const [date, setDate] = useState(new Date().getDate());
+  const [formattedDate, setFormattedDate] = useState();
 
   const generateSlots = (date) => {
     const day = convertDay(new Date(date).getDay());
@@ -122,15 +123,18 @@ const LaundryCalendar = () => {
   };
 
   useEffect(() => {
-    // const today = new Date().toISOString();
-    generateSlots(new Date());
-  }, []);
+    generateSlots(new Date(selectedDate));
+
+    const d = parseISO(selectedDate);
+    const formatted = format(d, "EEE, d MMM", { locale: sv });
+    setFormattedDate(formatted);
+  }, [selectedDate]);
 
   const handleDateSelection = (date) => {
     setSelectedDate(date.dateString);
-    setDay(convertDay(new Date(date.dateString).getDay()));
-    setDate(date.day);
-    setMonth(convertMonth(date.month - 1));
+    // setDay(convertDay(new Date(date.dateString).getDay()));
+    // setDate(date.day);
+    // setMonth(convertMonth(date.month - 1));
   };
 
   return (
@@ -150,20 +154,56 @@ const LaundryCalendar = () => {
         }}
         style={{ backgroundColor: "#FFF" }}
       />
-      <View className="flex-1 w-full bg-zinc-50 border-t border-t-zinc-300 mt-2.5">
-        <ScrollView className="px-5 pb-10">
+      <View className="flex-1 w-full bg-gray-50 border-t border-t-zinc-300 mt-2.5">
+        <View className="pt-4 mx-5">
+          <View className="flex-row items-end gap-x-0.5">
+            <Icon name="calendar-month-outline" size={29} color={"#333"} />
+            <Text className="capitalize text-xl text-slate-700 font-bold tracking-wide">
+              {formattedDate}
+            </Text>
+          </View>
+
+          <View className="flex-row pl-0.5 pt-1">
+            <Text className="text-base font-medium text-slate-600">
+              Tillgängliga tvättider för valt datum
+            </Text>
+          </View>
+        </View>
+
+        <ScrollView className="px-5 py-2 pb-10">
           {timeslots?.map((slot) => (
-            <TouchableOpacity
+            <View
               key={slot.id}
-              className="w-full flex-row items-center justify-center rounded-md bg-white border border-gray-200 shadow-sm shadow-gray-400 h-24  my-3"
+              className={` ${
+                slot.id == 2 ? "opacity-60 bg-red-100" : "bg-white"
+              } w-full flex-row overflow-hidden items-center justify-center rounded-md h-[86px] my-3 border border-gray-200 shadow-sm shadow-black`}
             >
-              <View className="flex-1 items-start justify-center px-2 bg-white h-full">
-                <Text>{slot.time}</Text>
+              <View>
+                <Icon name="washing-machine" color={"#4D4C7D"} size={56} />
               </View>
-              <View className="px-8 bg-green-200 h-full items-center justify-center">
-                <Text>Boka</Text>
+              <View className="flex-1 justify-center h-full">
+                <Text className="text-slate-500 text-sm font-medium tracking-wider">
+                  Tvättid {slot.id + 1}
+                </Text>
+                <Text className="font-bold text-slate-600 text-base">
+                  {slot.time}
+                </Text>
+                {/* <Text className="">Tvättstuga 1</Text> */}
               </View>
-            </TouchableOpacity>
+
+              <TouchableOpacity
+                disabled={slot.id == 2}
+                className={`px-5 py-2 mx-2.5 items-center rounded-full justify-center ${
+                  slot.id == 2 ? "bg-[#b04541]" : "bg-[#41B06E]"
+                }`}
+              >
+                {slot.id == 2 ? (
+                  <Text className="text-white font-bold">Uppbokad</Text>
+                ) : (
+                  <Text className="text-white font-bold">Boka</Text>
+                )}
+              </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       </View>

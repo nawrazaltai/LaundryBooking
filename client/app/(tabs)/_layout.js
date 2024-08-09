@@ -16,7 +16,6 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "orange",
-        tabBarStyle: { paddingTop: 8 },
       }}
     >
       <Tabs.Screen
@@ -28,6 +27,17 @@ export default function TabLayout() {
           ),
         }}
       />
+      {/* <Tabs.Screen
+        name="test"
+        // initialParams={{ initialPage: null }}
+        options={{
+          title: "test",
+          headerTintColor: "#FFF",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons size={30} name="calendar" color={color} />
+          ),
+        }}
+      /> */}
       <Tabs.Screen
         name="times"
         initialParams={{ initialPage: 0 }}
@@ -39,16 +49,6 @@ export default function TabLayout() {
               name="washing-machine"
               color={color}
             />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="test"
-        // initialParams={{ initialPage: null }}
-        options={{
-          title: "test",
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons size={30} name="calendar" color={color} />
           ),
         }}
       />
