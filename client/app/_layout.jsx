@@ -6,6 +6,7 @@ import { store } from "./redux/store";
 import { useDispatch } from "react-redux";
 import { setToken, setUserData } from "./redux/features/user/userSlice";
 import { getData } from "../lib/storage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // const useInitializeToken = () => {
 
@@ -66,10 +67,14 @@ const InitialLayout = () => {
   // <Slot />;
 };
 
+const queryClient = new QueryClient();
+
 const RootLayout = () => {
   return (
     <Provider store={store}>
-      <InitialLayout />
+      <QueryClientProvider client={queryClient}>
+        <InitialLayout />
+      </QueryClientProvider>
     </Provider>
   );
 };

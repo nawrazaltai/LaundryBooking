@@ -27,7 +27,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="test"
         // initialParams={{ initialPage: null }}
         options={{
@@ -37,7 +37,7 @@ export default function TabLayout() {
             <MaterialCommunityIcons size={30} name="calendar" color={color} />
           ),
         }}
-      /> */}
+      />
       <Tabs.Screen
         name="times"
         initialParams={{ initialPage: 0 }}
