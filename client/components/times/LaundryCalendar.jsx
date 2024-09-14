@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Alert,
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -28,9 +29,11 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { formatInTimeZone } from "date-fns-tz";
 import axios from "axios";
 import { API_URL } from "../../lib/constants";
-import useFetchBookingsByDate from "../../hooks/booking/useBookings";
+import { useFetchBookingsByDate } from "../../hooks/booking/useBookings";
 import { ordinaryTimes, redDaysTimes } from "../../lib/constants";
 import { useSelector } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
+import { postBooking } from "../../lib/api";
 
 LocaleConfig.locales["sv"] = {
   monthNames: [
@@ -144,52 +147,65 @@ const LaundryCalendar = () => {
 
   // console.log(formatDistanceToNowStrict(tz, { addSuffix: true }));
 
-  const handleBooking = async (obj) => {
-    let session_idx;
-    if (isSunday(selectedDate)) {
-      session_idx = redDaysTimes[obj.id].id;
-    } else {
-      session_idx = ordinaryTimes[obj.id].id;
-    }
+  const { mutate, isSuccess, isPending } = useMutation({
+    mutationFn: (bookingData) => postBooking(bookingData),
+    onSuccess: () => {
+      Alert.alert("Bokning framgångsrik", "Din bokning har lyckats!");
+    },
+    onError: () => {
+      Alert.alert("Något gick fel", "Bokningen misslyckades, prova igen.");
+    },
+  });
 
-    const newBooking = {
-      date: selectedDate,
-      user_id,
-      session_idx,
-    };
+  const renderItem = ({ item }) => {
+    return (
+      <View
+        key={item.id}
+        className={`w-full flex-row overflow-hidden items-center bg-white justify-center rounded-md h-[88px] my-3 border border-gray-200 shadow-sm shadow-gray-700 px-1`}
+      >
+        <View className="">
+          <Icon name="washing-machine" color={"#64748b"} size={56} />
+        </View>
 
-    try {
-      const postBooking = await axios.post(`${API_URL}/booking`, newBooking);
+        <View className="flex-1 justify-center h-full">
+          <Text className="text-slate-500 text-sm font-interMedium tracking-wider">
+            Tvättid {item.id + 1}
+          </Text>
+          <Text className="font-interBold text-slate-600 text-base">
+            {item.time}
+          </Text>
 
-      if (postBooking.status == 200) {
-        const insertedBooking = postBooking.data.booking;
+          {/* {item.bookedBy && (
+            <View className="flex-row gap-x-0.5 items-center">
+              <Icon name="account" size={14} color={"gray"} />
+              <Text className="text-slate-400 text-sm font-interMedium max-w-[85%]">
+                {item.bookedBy}
+              </Text>
+            </View>
+          )} */}
+        </View>
 
-        setTimeSlots((prevTimeSlots) =>
-          prevTimeSlots.map((slot) =>
-            slot.id == insertedBooking.session_idx
-              ? {
-                  ...slot,
-                  available: !slot.available,
-                  bookedBy: insertedBooking.user_id,
-                }
-              : slot
-          )
-        );
+        <TouchableOpacity
+          onPress={() => mutate({ obj: item, user_id, selectedDate })}
+          disabled={!item.available || isPending}
+          className={`px-5 py-2 mx-0.5 items-center rounded-full justify-center ${
+            !item.available ? "bg-[#af210e]" : "bg-[#41B06E]"
+          }`}
+        >
+          {item.available && (
+            <Text className="text-white font-interBold">Boka</Text>
+          )}
 
-        Alert.alert("Bokning bekräftad", "Din bokning har lyckats.");
-      }
-    } catch (error) {
-      Alert.alert(
-        "Bokning misslyckades",
-        "Ett fel inträffade vid bokningen, prova igen senare."
-      );
-    }
-
-    // const startDateStr = `${selectedDate}T${obj.time.split(" - ")[0]}`;
-    // const endDateStr = `${selectedDate}T${obj.time.split(" - ")[1]}`;
-
-    // console.log(formatISO(startDateStr, { representation: "" }));
-    // console.log(endDateStr);
+          {!item.available ? (
+            item.bookedBy == user_id ? (
+              <Text className="text-white font-interBold">Avboka</Text>
+            ) : (
+              <Text className="text-white font-interBold">Bokad</Text>
+            )
+          ) : null}
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   if (isLoading) {
@@ -202,58 +218,17 @@ const LaundryCalendar = () => {
 
   if (!error && !isLoading) {
     bookingView = (
-      <View>
-        {timeslots?.map((t) => {
-          return (
-            <View
-              key={t.id}
-              className={`w-full flex-row overflow-hidden items-center bg-white justify-center rounded-md h-[88px] my-3 border border-gray-200 shadow-sm shadow-gray-700 px-1`}
-            >
-              <View className="">
-                <Icon name="washing-machine" color={"#64748b"} size={56} />
-              </View>
-
-              <View className="flex-1 justify-center h-full">
-                <Text className="text-slate-500 text-sm font-medium tracking-wider">
-                  Tvättid {t.id + 1}
-                </Text>
-                <Text className="font-bold text-slate-600 text-base">
-                  {t.time}
-                </Text>
-
-                {t.bookedBy && (
-                  <View className="flex-row gap-x-0.5 items-center">
-                    <Icon name="account" size={14} color={"gray"} />
-                    <Text className="text-slate-400 text-sm font-medium">
-                      {t.bookedBy}
-                    </Text>
-                  </View>
-                )}
-              </View>
-
-              <TouchableOpacity
-                onPress={() => handleBooking(t)}
-                disabled={!t.available}
-                className={`px-5 py-2 mx-0.5 items-center rounded-full justify-center ${
-                  !t.available ? "bg-[#af210e]" : "bg-[#41B06E]"
-                }`}
-              >
-                {t.available && (
-                  <Text className="text-white font-bold">Boka</Text>
-                )}
-
-                {!t.available ? (
-                  t.bookedBy == user_id ? (
-                    <Text className="text-white font-bold">Avboka</Text>
-                  ) : (
-                    <Text className="text-white font-bold">Bokad</Text>
-                  )
-                ) : null}
-              </TouchableOpacity>
-            </View>
-          );
-        })}
-      </View>
+      <FlatList
+        data={timeslots}
+        keyExtractor={(i) => i.id}
+        renderItem={renderItem}
+        contentContainerStyle={{
+          gap: 10,
+          width: "100%",
+          marginVertical: 5,
+          paddingBottom: 50,
+        }}
+      />
     );
   }
 
@@ -279,20 +254,20 @@ const LaundryCalendar = () => {
       <View className="flex-1 w-full bg-neutral-50 border-t border-t-zinc-300 mt-2.5">
         <View className="pt-4 mx-5">
           <View className="flex-row items-end gap-x-0.5">
-            <Icon name="calendar-month-outline" size={35} color={"#333"} />
-            <Text className="capitalize text-xl text-slate-700 font-bold tracking-wide">
+            {/* <Icon name="calendar-month-outline" size={35} color={"#333"} /> */}
+            <Text className="capitalize text-xl text-slate-700 font-interBold tracking-wide">
               {formattedDate}
             </Text>
           </View>
 
-          <View className="flex-row pl-0.5 pt-1">
-            <Text className="text-base font-medium text-slate-600">
-              Tillgängliga tvättider för valt datum
+          <View className="flex-row  pt-1">
+            <Text className="text-base font-interMedium text-slate-600 tracking-wide">
+              Tvättider för valt datum
             </Text>
           </View>
         </View>
 
-        <ScrollView className="px-5 py-2 pb-10">{bookingView}</ScrollView>
+        <View className="px-5 py-2 pb-10">{bookingView}</View>
       </View>
     </View>
   );

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBookingsByDate } from "../../lib/api";
+import { getBookingsByDate, getBookingsByUserId } from "../../lib/api";
 
-const useFetchBookingsByDate = (date) => {
+export const useFetchBookingsByDate = (date) => {
   return useQuery({
     queryKey: ["bookings", date],
     queryFn: () => getBookingsByDate(date),
@@ -9,4 +9,10 @@ const useFetchBookingsByDate = (date) => {
   });
 };
 
-export default useFetchBookingsByDate;
+export const useFetchBookingsByUserId = (user_id) => {
+  return useQuery({
+    queryKey: ["userBookings", user_id],
+    queryFn: () => getBookingsByUserId(user_id),
+    // staleTime: 0,
+  });
+};

@@ -18,12 +18,10 @@ import { StatusBar } from "expo-status-bar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useForm, Controller } from "react-hook-form";
 import TextView from "../components/profile/TextView";
-import axios from "axios";
-import { getData } from "../lib/storage";
 import CustomButton from "../components/button/CustomButton";
-import { API_URL } from "../lib/constants";
 import CustomInput from "../components/input/CustomInput";
 import { logout } from "./redux/features/user/userSlice";
+import { useNavigation } from "expo-router";
 
 const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
   return (
@@ -33,7 +31,7 @@ const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
       </Link>
 
       <View className="flex-1 ">
-        <Text className="text-2xl mx-auto font-semibold">Profil</Text>
+        <Text className="text-2xl mx-auto font-interSemi">Profil</Text>
       </View>
 
       <View className=" flex-1 items-end pr-2">
@@ -42,7 +40,7 @@ const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
             styles={"bg-transparent"}
             onPress={handleSubmit(onSubmit)}
           >
-            <Text className="text-xl font-bold text-blue-600">Spara</Text>
+            <Text className="text-xl font-interBold text-blue-600">Spara</Text>
           </CustomButton>
         ) : null}
       </View>
@@ -53,9 +51,10 @@ const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
 const Profile = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   const { _id, username, firstName, lastName, apartmentNumber } = useSelector(
-    (state) => state.user.user
+    (state) => state?.user?.user || {}
   );
 
   const {
@@ -75,6 +74,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    navigation.navigate("signIn");
   };
 
   return (
@@ -95,7 +95,7 @@ const Profile = () => {
         >
           <ScrollView>
             <View className="w-full px-4 ">
-              <Text className="text-xl pt-5 font-bold ">Personligt</Text>
+              <Text className="text-xl pt-5 font-interBold ">Personligt</Text>
 
               <View className="py-2 opacity-60">
                 <TextView
@@ -114,7 +114,7 @@ const Profile = () => {
             </View>
 
             <View className="px-4">
-              <Text className="text-xl font-bold pb-2 pt-5">Konto</Text>
+              <Text className="text-xl font-interBold pb-2 pt-5">Konto</Text>
               <CustomInput
                 control={control}
                 name="username"
@@ -130,14 +130,14 @@ const Profile = () => {
               />
 
               <View className="flex mt-5">
-                <Text className="text-gray-600 font-bold text-sm pb-1">
+                <Text className="text-gray-600 font-interBold text-sm pb-1">
                   Lösenord
                 </Text>
 
                 <Link href={"/changePassword"} asChild>
                   <TouchableOpacity className="flex-1 flex-row items-center justify-between bg-gray-50 p-2.5 rounded-md">
                     <View className="flex-row  items-center">
-                      <Text className="text-base font-medium">
+                      <Text className="text-base font-interMedium">
                         Hantera lösenord
                       </Text>
                       <Icon name="chevron-right" size={25} color={"#363062"} />
@@ -148,13 +148,14 @@ const Profile = () => {
               </View>
             </View>
           </ScrollView>
+
           <View className="w-full px-4 bottom-0 absolute">
             <CustomButton
               onPress={handleLogout}
               styles="flex-row items-center justify-center bg-red-400 p-3 rounded-md w-full items-center"
             >
               <Icon name="logout" color="#FFF" size={20} />
-              <Text className="text-white pl-2 font-medium text-base">
+              <Text className="text-white pl-2 font-interMedium text-base">
                 Logga ut
               </Text>
             </CustomButton>

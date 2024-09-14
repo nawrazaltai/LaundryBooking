@@ -44,13 +44,13 @@ export const getBookingsByUserId = async (req, res) => {
     const bookings = await Booking.find({ user_id });
     res.send({ bookings });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.send({ error });
   }
 };
 
 export const getBookingsByDate = async (req, res) => {
-  console.log("body", req.params.date);
+  // console.log("body", req.params.date);
 
   const date = req.params.date;
 

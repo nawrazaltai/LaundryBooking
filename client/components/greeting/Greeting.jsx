@@ -89,11 +89,11 @@ const Greeting = ({ username }) => {
       <Icon name={icon} size={38} color="#F5F5F5" />
 
       <View className="ml-2.5">
-        <Text className="text-base text-white font-bold">
+        <Text className="text-base text-white font-interBold">
           {greeting}, {username}
         </Text>
         <View>
-          <Text className="text-white font-light">{formattedDate}</Text>
+          <Text className="text-white font-interRegular">{formattedDate}</Text>
         </View>
       </View>
     </View>
