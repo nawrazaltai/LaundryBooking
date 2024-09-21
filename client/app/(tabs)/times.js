@@ -39,7 +39,7 @@ const Times = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("Loaded");
+      // console.log("Loaded");
       return () => {};
     }, [])
   );

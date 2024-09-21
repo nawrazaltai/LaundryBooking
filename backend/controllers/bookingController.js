@@ -49,6 +49,30 @@ export const getBookingsByUserId = async (req, res) => {
   }
 };
 
+export const getUpcomingBookingsByUser = async (req, res) => {
+  const user_id = req.params.user_id;
+  const today = new Date();
+
+  try {
+    const bookings = await Booking.find({
+      user_id: user_id,
+      date: { $gte: today },
+    })
+      .sort({ date: 1 })
+      .limit(3);
+
+    // Om bokningar hittas, returnera dem
+    if (bookings.length) {
+      return res.send({ bookings });
+    }
+
+    return res.send([]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Serverfel. Kunde inte hämta bokningar." });
+  }
+};
+
 export const getBookingsByDate = async (req, res) => {
   // console.log("body", req.params.date);
 

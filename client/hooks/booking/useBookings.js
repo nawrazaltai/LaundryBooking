@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBookingsByDate, getBookingsByUserId } from "../../lib/api";
+import {
+  getBookingsByDate,
+  getBookingsByUserId,
+  getUpcomingBookings,
+} from "../../lib/api";
 
 export const useFetchBookingsByDate = (date) => {
   return useQuery({
@@ -13,6 +17,14 @@ export const useFetchBookingsByUserId = (user_id) => {
   return useQuery({
     queryKey: ["userBookings", user_id],
     queryFn: () => getBookingsByUserId(user_id),
+    // staleTime: 0,
+  });
+};
+
+export const useFetchUpcomingBookings = (user_id) => {
+  return useQuery({
+    queryKey: ["upcomingBookings", user_id],
+    queryFn: () => getUpcomingBookings(user_id),
     // staleTime: 0,
   });
 };

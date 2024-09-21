@@ -2,8 +2,6 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
-  ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -11,29 +9,16 @@ import {
 import React, { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
-import {
-  differenceInHours,
-  differenceInMinutes,
-  format,
-  formatDistanceStrict,
-  formatDistanceToNow,
-  formatDistanceToNowStrict,
-  formatISO,
-  isSunday,
-  parse,
-  parseISO,
-} from "date-fns";
+import { format, isSunday, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-// import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
-import { formatInTimeZone } from "date-fns-tz";
-import axios from "axios";
-import { API_URL } from "../../lib/constants";
 import { useFetchBookingsByDate } from "../../hooks/booking/useBookings";
 import { ordinaryTimes, redDaysTimes } from "../../lib/constants";
 import { useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
 import { postBooking } from "../../lib/api";
+// import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
+import { useQueryClient } from "@tanstack/react-query";
 
 LocaleConfig.locales["sv"] = {
   monthNames: [
@@ -86,7 +71,6 @@ const LaundryCalendar = () => {
   const [formattedDate, setFormattedDate] = useState();
   const { data, error, isLoading } = useFetchBookingsByDate(selectedDate);
   const { _id: user_id } = useSelector((state) => state.user.user);
-
   let bookingView;
 
   const setIsBookedAndBookedBy = (arr) => {
@@ -120,36 +104,22 @@ const LaundryCalendar = () => {
   useEffect(() => {
     generateSlots(new Date(selectedDate));
 
-    const d = parseISO(selectedDate);
-    const formatted = format(d, "EEEE, d MMM", { locale: sv });
+    const formatted = format(selectedDate, "EEEE, d MMMM.", { locale: sv });
     setFormattedDate(formatted);
   }, [selectedDate, data]);
 
   const handleDateSelection = (date) => {
-    setSelectedDate(date.dateString);
+    setSelectedDate(new Date(date.dateString));
   };
 
-  // const timeSlot = "07:00 - 12:00";
-  // const [startTimeStr, endTimeStr] = timeSlot.split(" - ");
+  const client = useQueryClient();
 
-  // const test = `${selectedDate}T${startTimeStr}`;
-
-  // const tz = formatInTimeZone(
-  //   `${selectedDate}T${startTimeStr}`,
-  //   "Europe/Stockholm",
-  //   "yyyy-MM-dd HH:mm"
-  // );
-
-  // console.log(tz);
-
-  // const result = formatISO(new Date(test), { representation: "basic" });
-  // console.log(result);
-
-  // console.log(formatDistanceToNowStrict(tz, { addSuffix: true }));
-
-  const { mutate, isSuccess, isPending } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (bookingData) => postBooking(bookingData),
     onSuccess: () => {
+      client.invalidateQueries({ queryKey: ["bookings"] });
+      client.invalidateQueries({ queryKey: ["userBookings"] });
+      client.invalidateQueries({ queryKey: ["upcomingBookings"] });
       Alert.alert("Bokning framgångsrik", "Din bokning har lyckats!");
     },
     onError: () => {
@@ -161,7 +131,7 @@ const LaundryCalendar = () => {
     return (
       <View
         key={item.id}
-        className={`w-full flex-row overflow-hidden items-center bg-white justify-center rounded-md h-[88px] my-3 border border-gray-200 shadow-sm shadow-gray-700 px-1`}
+        className={`flex-1 py-5 mx-5 px-1.5 flex-row overflow-hidden items-center bg-white justify-center rounded-md border border-gray-200 shadow-sm shadow-gray-700`}
       >
         <View className="">
           <Icon name="washing-machine" color={"#64748b"} size={56} />
@@ -235,7 +205,9 @@ const LaundryCalendar = () => {
   return (
     <View className="flex-1">
       <Calendar
-        markedDates={{ [selectedDate]: { selected: true } }}
+        markedDates={{
+          [new Date(selectedDate).toLocaleDateString()]: { selected: true },
+        }}
         showWeekNumbers={true}
         minDate={new Date().toDateString()}
         firstDay={1}
@@ -267,10 +239,28 @@ const LaundryCalendar = () => {
           </View>
         </View>
 
-        <View className="px-5 py-2 pb-10">{bookingView}</View>
+        <View className="flex-1 mt-3">{bookingView}</View>
       </View>
     </View>
   );
 };
 
 export default LaundryCalendar;
+
+// const timeSlot = "07:00 - 12:00";
+// const [startTimeStr, endTimeStr] = timeSlot.split(" - ");
+
+// const test = `${selectedDate}T${startTimeStr}`;
+
+// const tz = formatInTimeZone(
+//   `${selectedDate}T${startTimeStr}`,
+//   "Europe/Stockholm",
+//   "yyyy-MM-dd HH:mm"
+// );
+
+// console.log(tz);
+
+// const result = formatISO(new Date(test), { representation: "basic" });
+// console.log(result);
+
+// console.log(formatDistanceToNowStrict(tz, { addSuffix: true }));
