@@ -61,7 +61,6 @@ export const getUpcomingBookingsByUser = async (req, res) => {
       .sort({ date: 1 })
       .limit(3);
 
-    // Om bokningar hittas, returnera dem
     if (bookings.length) {
       return res.send({ bookings });
     }

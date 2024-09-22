@@ -28,25 +28,28 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="test"
-        // initialParams={{ initialPage: null }}
-        options={{
-          title: "test",
-          headerTintColor: "#FFF",
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons size={30} name="calendar" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="times"
-        initialParams={{ initialPage: 0 }}
         options={{
-          title: "Tvättider",
+          title: "Boka",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               size={30}
               name="washing-machine"
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="test"
+        // initialParams={{ initialPage: null }}
+        options={{
+          title: "Mina Tider",
+          headerTintColor: "#FFF",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              size={30}
+              name="calendar-clock"
               color={color}
             />
           ),

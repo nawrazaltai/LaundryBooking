@@ -92,8 +92,8 @@ const Dashboard = () => {
               </Link>
             </View>
           ) : (
-            <View className="px-4 py-2.5 flex-1 w-full rounded-t-2xl">
-              <Text className="text-2xl font-interMedium py-2">
+            <View className="px-4 pt-2.5 flex-1 w-full rounded-t-2xl">
+              <Text className="text-2xl font-interMedium pt-2">
                 Kommande tvättider
               </Text>
 
