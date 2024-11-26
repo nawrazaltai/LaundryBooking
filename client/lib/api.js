@@ -47,3 +47,13 @@ export const postBooking = async (bookingData) => {
   // console.log(formatISO(startDateStr, { representation: "" }));
   // console.log(endDateStr);
 };
+
+export const cancelBooking = async ({ booking_id }) => {
+  const res = await axios.delete(`${API_URL}/booking/${booking_id}`);
+
+  if (res.status !== 200) {
+    throw new Error("Avbokningen misslyckades");
+  }
+
+  return res;
+};

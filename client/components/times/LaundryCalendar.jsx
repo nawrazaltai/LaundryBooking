@@ -16,7 +16,7 @@ import { useFetchBookingsByDate } from "../../hooks/booking/useBookings";
 import { ordinaryTimes, redDaysTimes } from "../../lib/constants";
 import { useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
-import { postBooking } from "../../lib/api";
+import { cancelBooking, postBooking } from "../../lib/api";
 // import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -71,6 +71,7 @@ const LaundryCalendar = () => {
   const [formattedDate, setFormattedDate] = useState();
   const { data, error, isLoading } = useFetchBookingsByDate(selectedDate);
   const { _id: user_id } = useSelector((state) => state.user.user);
+
   let bookingView;
 
   const setIsBookedAndBookedBy = (arr) => {
@@ -79,11 +80,23 @@ const LaundryCalendar = () => {
         (booking) => booking?.session_idx == d.id
       );
 
-      const isBookedBy =
-        isBooked &&
-        data.bookings.find((booking) => booking.session_idx == d.id)?.user_id;
+      let isBookedBy = null;
+      let booking_id = null;
 
-      return { ...d, available: !isBooked, bookedBy: isBookedBy };
+      if (isBooked) {
+        const booking = data?.bookings?.find(
+          (booking) => booking.session_idx == d.id
+        );
+        isBookedBy = booking?.user_id;
+        booking_id = booking?._id;
+      }
+
+      return {
+        ...d,
+        available: !isBooked,
+        bookedBy: isBookedBy,
+        booking_id: booking_id,
+      };
     });
 
     return updateTimeSlots;
@@ -113,19 +126,53 @@ const LaundryCalendar = () => {
   };
 
   const client = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: (bookingData) => postBooking(bookingData),
+  const useBookAppointment = useMutation({
+    mutationFn: (bookingData) => {
+      return postBooking(bookingData);
+    },
     onSuccess: () => {
       client.invalidateQueries({ queryKey: ["bookings"] });
       client.invalidateQueries({ queryKey: ["userBookings"] });
       client.invalidateQueries({ queryKey: ["upcomingBookings"] });
-      Alert.alert("Bokning framgångsrik", "Din bokning har lyckats!");
+      Alert.alert("Bokning bekräftad", "Din bokning är bekräftad.");
     },
     onError: () => {
       Alert.alert("Något gick fel", "Bokningen misslyckades, prova igen.");
     },
   });
+
+  const useCancelAppointment = useMutation({
+    mutationFn: (bookingData) => {
+      return cancelBooking(bookingData);
+    },
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ["bookings"] });
+      client.invalidateQueries({ queryKey: ["userBookings"] });
+      client.invalidateQueries({ queryKey: ["upcomingBookings"] });
+      Alert.alert("Avbokning bekräftad", "Din avbokning är bekräftad.");
+    },
+    onError: () => {
+      Alert.alert("Något gick fel", "Avbokningen misslyckades, prova igen.");
+    },
+  });
+
+  const handlePress = ({
+    available,
+    item,
+    selectedDate,
+    user_id,
+    bookedBy,
+    booking_id,
+  }) => {
+    if (!available) {
+      bookedBy == user_id
+        ? useCancelAppointment.mutate({ booking_id, user_id })
+        : null;
+      return;
+    }
+
+    useBookAppointment.mutate({ obj: item, user_id, selectedDate });
+  };
 
   const renderItem = ({ item }) => {
     return (
@@ -156,8 +203,17 @@ const LaundryCalendar = () => {
         </View>
 
         <TouchableOpacity
-          onPress={() => mutate({ obj: item, user_id, selectedDate })}
-          disabled={!item.available || isPending}
+          onPress={() =>
+            handlePress({
+              available: item?.available,
+              item,
+              selectedDate,
+              user_id,
+              bookedBy: item?.bookedBy,
+              booking_id: item?.booking_id,
+            })
+          }
+          disabled={!item.available && item.bookedBy !== user_id}
           className={`px-5 py-2 mx-0.5 items-center rounded-full justify-center ${
             !item.available ? "bg-[#af210e]" : "bg-[#41B06E]"
           }`}
@@ -183,7 +239,11 @@ const LaundryCalendar = () => {
   }
 
   if (error) {
-    bookingView = <Text>Ett fel uppstod, försök igen senare.</Text>;
+    bookingView = (
+      <Text className="pl-5 text-lg font-interSemi">
+        Ett fel uppstod, försök igen senare.
+      </Text>
+    );
   }
 
   if (!error && !isLoading) {
@@ -226,7 +286,6 @@ const LaundryCalendar = () => {
       <View className="flex-1 w-full bg-neutral-50 border-t border-t-zinc-300 mt-2.5">
         <View className="pt-4 mx-5">
           <View className="flex-row items-end gap-x-0.5">
-            {/* <Icon name="calendar-month-outline" size={35} color={"#333"} /> */}
             <Text className="capitalize text-xl text-slate-700 font-interBold tracking-wide">
               {formattedDate}
             </Text>
@@ -246,21 +305,3 @@ const LaundryCalendar = () => {
 };
 
 export default LaundryCalendar;
-
-// const timeSlot = "07:00 - 12:00";
-// const [startTimeStr, endTimeStr] = timeSlot.split(" - ");
-
-// const test = `${selectedDate}T${startTimeStr}`;
-
-// const tz = formatInTimeZone(
-//   `${selectedDate}T${startTimeStr}`,
-//   "Europe/Stockholm",
-//   "yyyy-MM-dd HH:mm"
-// );
-
-// console.log(tz);
-
-// const result = formatISO(new Date(test), { representation: "basic" });
-// console.log(result);
-
-// console.log(formatDistanceToNowStrict(tz, { addSuffix: true }));

@@ -44,7 +44,7 @@ export default function TabLayout() {
         name="test"
         // initialParams={{ initialPage: null }}
         options={{
-          title: "Mina Tider",
+          title: "Mina bokningar",
           headerTintColor: "#FFF",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons

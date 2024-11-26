@@ -1,6 +1,6 @@
 import Booking from "../models/bookingModel.js";
 
-export const book = async (req, res) => {
+export const postBooking = async (req, res) => {
   // console.log(req.body);
 
   const { date, user_id, session_idx } = req.body;
@@ -86,7 +86,22 @@ export const getBookingsByDate = async (req, res) => {
 
     return res.send([]);
   } catch (error) {
-    console.log(error);
     res.send({ error });
+  }
+};
+
+export const cancelBooking = async (req, res) => {
+  const id = req.params.booking_id;
+
+  try {
+    const booking = await Booking.deleteOne({ _id: id });
+
+    if (booking.deletedCount === 0) {
+      return res.status(404).send({ error: "Ingen bokning med id:t hittades" });
+    }
+
+    res.send({ message: "Avbokning bekräftad", id });
+  } catch (error) {
+    res.status(500).res.send({ error });
   }
 };

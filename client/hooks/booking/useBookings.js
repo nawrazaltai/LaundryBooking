@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  cancelBooking,
   getBookingsByDate,
   getBookingsByUserId,
   getUpcomingBookings,

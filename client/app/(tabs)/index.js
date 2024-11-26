@@ -51,7 +51,7 @@ const Dashboard = () => {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="light" />
+      <StatusBar style="auto" />
 
       <SafeAreaView
         className="flex-1 bg-primary"
@@ -67,7 +67,7 @@ const Dashboard = () => {
         </View>
 
         <View className="flex-1 bg-white rounded-t-2xl items-center">
-          {nearestBooking?.length == 0 && !isLoading ? (
+          {!nearestBooking?.length && !isLoading ? (
             <View className="my-auto items-center">
               <Image
                 source={joy}

@@ -11,6 +11,7 @@ import {
 import { ordinaryTimes, redDaysTimes } from "../../lib/constants";
 import { sv } from "date-fns/locale";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 
 const UpcomingBookingCard = (booking) => {
   const { date, session_idx, _id: id } = booking.booking;
@@ -31,8 +32,10 @@ const UpcomingBookingCard = (booking) => {
     const now = new Date();
     const targetDate = new Date(date);
 
+    const zonedTime = toZonedTime(targetDate, "Europe/Stockholm");
+
     if (isToday(targetDate)) {
-      return `Idag ${format(targetDate, "HH:mm")}`;
+      return `Idag ${format(zonedTime, "HH:mm")}`;
     }
 
     if (isTomorrow(targetDate)) {
@@ -50,14 +53,12 @@ const UpcomingBookingCard = (booking) => {
 
   return (
     <View className="mt-2.5">
-      <View className="flex-row border border-gray-400 overflow-hidden rounded-md h-[100px] bg-neutral-50">
-        <View className="flex-col bg-secondary  items-center justify-center px-5">
-          <Text className="font-interSemi text-2xl text-neutral-50">
+      <View className="flex-row border border-gray-200 overflow-hidden rounded-md h-[100px] bg-[#F9F9FC]">
+        <View className="flex-col bg-[#F9F9FC] items-center border-r border-r-0.5 border-r-gray-300 justify-center px-5">
+          <Text className="font-interSemi text-2xl text-black">
             {new Date(date).getDate()}
           </Text>
-          <Text className="font-interRegular text-neutral-50">
-            {formatMonth()}
-          </Text>
+          <Text className="font-interRegular text-black">{formatMonth()}</Text>
         </View>
 
         <View className="flex-1 justify-center pl-4 gap-2">

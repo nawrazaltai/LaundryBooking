@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
 import { StatusBar } from "expo-status-bar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -21,7 +20,7 @@ import TextView from "../components/profile/TextView";
 import CustomButton from "../components/button/CustomButton";
 import CustomInput from "../components/input/CustomInput";
 import { logout } from "./redux/features/user/userSlice";
-import { useNavigation } from "expo-router";
+import { useRouter, Link, useNavigation } from "expo-router";
 
 const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
   return (
@@ -30,11 +29,11 @@ const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
         <Icon name="chevron-left" color={"black"} size={40} />
       </Link>
 
-      <View className="flex-1 ">
+      <View className="">
         <Text className="text-2xl mx-auto font-interSemi">Profil</Text>
       </View>
 
-      <View className=" flex-1 items-end pr-2">
+      <View className="flex-1 items-end pr-2">
         {isValid ? (
           <CustomButton
             styles={"bg-transparent"}
@@ -52,6 +51,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const router = useRouter();
 
   const { _id, username, firstName, lastName, apartmentNumber } = useSelector(
     (state) => state?.user?.user || {}
@@ -74,7 +74,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigation.navigate("signIn");
+    router.replace("/signIn");
   };
 
   return (
