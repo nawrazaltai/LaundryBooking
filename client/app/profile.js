@@ -20,7 +20,7 @@ import TextView from "../components/profile/TextView";
 import CustomButton from "../components/button/CustomButton";
 import CustomInput from "../components/input/CustomInput";
 import { logout } from "./redux/features/user/userSlice";
-import { useRouter, Link, useNavigation } from "expo-router";
+import { router, Link, useNavigation } from "expo-router";
 
 const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
   return (
@@ -50,8 +50,6 @@ const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
 const Profile = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
-  const router = useRouter();
 
   const { _id, username, firstName, lastName, apartmentNumber } = useSelector(
     (state) => state?.user?.user || {}

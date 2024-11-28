@@ -14,9 +14,9 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 
 const UpcomingBookingCard = (booking) => {
-  const { date, session_idx, _id: id } = booking.booking;
+  const { start_date, session_idx, _id: id } = booking.booking;
 
-  const getSessionTime = () => {
+  const getSessionTime = (date) => {
     if (isSunday(date)) {
       return redDaysTimes[session_idx].time;
     }
@@ -24,13 +24,13 @@ const UpcomingBookingCard = (booking) => {
   };
 
   const formatMonth = () => {
-    let shortMonth = format(date, "LLL", { locale: sv });
+    let shortMonth = format(start_date, "LLL", { locale: sv });
     return shortMonth.replace(".", "");
   };
 
   const formatDate = (date) => {
     const now = new Date();
-    const targetDate = new Date(date);
+    const targetDate = new Date(start_date);
 
     const zonedTime = toZonedTime(targetDate, "Europe/Stockholm");
 
@@ -52,44 +52,42 @@ const UpcomingBookingCard = (booking) => {
   };
 
   return (
-    <View className="mt-2.5">
-      <View className="flex-row border border-gray-200 overflow-hidden rounded-md h-[100px] bg-[#F9F9FC]">
-        <View className="flex-col bg-[#F9F9FC] items-center border-r border-r-0.5 border-r-gray-300 justify-center px-5">
-          <Text className="font-interSemi text-2xl text-black">
-            {new Date(date).getDate()}
+    <View className="flex-row border border-gray-200 overflow-hidden rounded-lg h-[110px] bg-[#F9F9FC] shadow-lg shadow-gray-500 bg-white">
+      <View className="flex-col bg-[#F9F9FC] items-center border-r border-r-0.5 border-r-gray-300 justify-center px-5 bg-secondary">
+        <Text className="font-interSemi text-2xl text-white">
+          {new Date(start_date).getDate()}
+        </Text>
+        <Text className="font-interRegular text-white">{formatMonth()}</Text>
+      </View>
+
+      <View className="flex-1 justify-center pl-4 gap-2.5">
+        <View className="flex-row items-end">
+          <MaterialCommunityIcons
+            name="calendar-today"
+            size={20}
+            color={"gray"}
+          />
+          <Text className="font-interSemi pl-2 capitalize text-gray-500">
+            {formatDate(start_date)}
           </Text>
-          <Text className="font-interRegular text-black">{formatMonth()}</Text>
         </View>
 
-        <View className="flex-1 justify-center pl-4 gap-2">
-          <View className="flex-row items-end">
-            <MaterialCommunityIcons
-              name="calendar-today"
-              size={20}
-              color={"gray"}
-            />
-            <Text className="font-interSemi pl-2 capitalize text-gray-600">
-              {formatDate(date)}.
-            </Text>
-          </View>
+        <View className="flex-row items-end">
+          <MaterialCommunityIcons name="clock" size={20} color={"gray"} />
+          <Text className="font-interSemi pl-2 text-gray-600">
+            {getSessionTime(start_date)}
+          </Text>
+        </View>
 
-          <View className="flex-row items-end">
-            <MaterialCommunityIcons name="clock" size={20} color={"gray"} />
-            <Text className="font-interSemi pl-2 text-gray-600">
-              {getSessionTime(date)}.
-            </Text>
-          </View>
-
-          <View className="flex-row items-end">
-            <MaterialCommunityIcons
-              name="washing-machine"
-              size={20}
-              color={"gray"}
-            />
-            <Text className=" font-interSemi pl-2 text-gray-600">
-              Tvättstuga 1.
-            </Text>
-          </View>
+        <View className="flex-row items-end">
+          <MaterialCommunityIcons
+            name="washing-machine"
+            size={20}
+            color={"gray"}
+          />
+          <Text className=" font-interSemi pl-2 text-gray-600">
+            Tvättstuga 1
+          </Text>
         </View>
       </View>
     </View>

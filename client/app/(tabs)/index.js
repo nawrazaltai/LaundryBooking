@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Button,
   FlatList,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -34,6 +35,7 @@ const Dashboard = () => {
   const [nearestBooking, setNearestBooking] = useState(null);
 
   const { data, isLoading, error } = useFetchUpcomingBookings(user_id);
+  console.log(data);
 
   useEffect(() => {
     setNearestBooking(data?.bookings);
@@ -61,7 +63,7 @@ const Dashboard = () => {
       >
         <View className="flex-row items-center justify-between px-5 pb-5">
           <Greeting username={firstName} />
-          <Link href={"/../profile"} asChild>
+          <Link href={"/profile"} asChild>
             <Icon name="person-circle-outline" size={44} color={"#F5F5F5"} />
           </Link>
         </View>
@@ -92,15 +94,30 @@ const Dashboard = () => {
               </Link>
             </View>
           ) : (
-            <View className="px-4 pt-2.5 flex-1 w-full rounded-t-2xl">
-              <Text className="text-2xl font-interMedium pt-2">
-                Kommande tvättider
-              </Text>
+            <View className="flex-1 w-full rounded-t-2xl bg-violet-50">
+              <View className="pt-5  flex flex-row items-end justify-between mx-3.5 border-b border-b-gray-200 mb-3 pb-1">
+                <Text className="text-xl font-interBold">
+                  Mina kommande tvättider
+                </Text>
+                <Link href={"/(bookings)"} asChild>
+                  <TouchableWithoutFeedback>
+                    <Text className="text-base font-interBold text-gray-700">
+                      Se alla
+                    </Text>
+                  </TouchableWithoutFeedback>
+                </Link>
+              </View>
 
               <FlatList
                 data={nearestBooking}
                 keyExtractor={(b) => b._id}
                 renderItem={renderItem}
+                contentContainerStyle={{
+                  gap: 15,
+                  display: "flex",
+                  width: "100%",
+                  paddingHorizontal: 12,
+                }}
               />
             </View>
           )}

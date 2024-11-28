@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
   {
-    date: {
-      type: Date,
-      required: true,
-    },
+    // date: {
+    //   type: Date,
+    //   required: true,
+    // },
     session_idx: {
       type: String,
       required: true,
@@ -14,7 +14,14 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
+    start_date: {
+      type: Date,
+      required: true,
+    },
+    end_date: {
+      type: Date,
+      required: true,
+    },
     // apartmentNumber: {
     //   type: String,
     //   required: true,

@@ -1,4 +1,4 @@
-import { Redirect, Tabs, Stack } from "expo-router";
+import { Redirect, Tabs, Stack, withLayoutContext } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { Text, View } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -41,7 +41,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="test"
+        name="(bookings)"
         // initialParams={{ initialPage: null }}
         options={{
           title: "Mina bokningar",

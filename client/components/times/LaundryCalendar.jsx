@@ -17,7 +17,6 @@ import { ordinaryTimes, redDaysTimes } from "../../lib/constants";
 import { useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
 import { cancelBooking, postBooking } from "../../lib/api";
-// import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
 import { useQueryClient } from "@tanstack/react-query";
 
 LocaleConfig.locales["sv"] = {
@@ -122,7 +121,7 @@ const LaundryCalendar = () => {
   }, [selectedDate, data]);
 
   const handleDateSelection = (date) => {
-    setSelectedDate(new Date(date.dateString));
+    setSelectedDate(date.dateString);
   };
 
   const client = useQueryClient();

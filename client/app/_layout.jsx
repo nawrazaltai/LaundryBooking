@@ -2,7 +2,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Redirect, Slot, Stack } from "expo-router";
 import { Provider, useSelector } from "react-redux";
-import { store } from "./redux/store";
+import Store from "./redux/store";
 import { useDispatch } from "react-redux";
 import { setToken, setUserData } from "./redux/features/user/userSlice";
 import { getData } from "../lib/storage";
@@ -102,7 +102,7 @@ const queryClient = new QueryClient();
 
 const RootLayout = () => {
   return (
-    <Provider store={store}>
+    <Provider store={Store}>
       <QueryClientProvider client={queryClient}>
         <InitialLayout />
       </QueryClientProvider>

@@ -1,8 +1,7 @@
+import e from "express";
 import Booking from "../models/bookingModel.js";
 
 export const postBooking = async (req, res) => {
-  // console.log(req.body);
-
   const { date, user_id, session_idx } = req.body;
 
   if (!user_id) {
@@ -10,18 +9,48 @@ export const postBooking = async (req, res) => {
   }
 
   try {
+    let start_time = "";
+    let end_time = "";
+
+    const getDay = new Date(date).getDay();
+
+    if (getDay == 0 || getDay == 6) {
+      if (session_idx == "0") {
+        start_time = "08";
+        end_time = "13";
+      } else {
+        start_time = "13";
+        end_time = "18";
+      }
+    } else {
+      if (session_idx == "0") {
+        start_time = "06";
+        end_time = "11";
+      } else if (session_idx == "1") {
+        start_time = "11";
+        end_time = "16";
+      } else {
+        start_time = "16";
+        end_time = "21";
+      }
+    }
+
+    const start_date = new Date(`${date}T${start_time}:00:00.000Z`);
+    const end_date = new Date(`${date}T${end_time}:00:00.000Z`);
+
     const isBooked = await Booking.findOne({
-      date: date,
+      start_date: start_date,
       session_idx: session_idx,
     });
 
     if (isBooked) {
-      res.send("Vald tid är redan bokad.");
+      res.status(401).send("Vald tid är redan bokad.");
       return;
     }
 
     const addBooking = await Booking.create({
-      date,
+      start_date,
+      end_date,
       user_id,
       session_idx,
     });
@@ -53,10 +82,11 @@ export const getUpcomingBookingsByUser = async (req, res) => {
   const user_id = req.params.user_id;
   const today = new Date();
 
+  console.log(user_id);
   try {
     const bookings = await Booking.find({
       user_id: user_id,
-      date: { $gte: today },
+      start_date: { $gte: today },
     })
       .sort({ date: 1 })
       .limit(3);
@@ -77,8 +107,16 @@ export const getBookingsByDate = async (req, res) => {
 
   const date = req.params.date;
 
+  const startOfDay = new Date(`${date}T00:00:00.000Z`);
+  const endOfDay = new Date(`${date}T23:59:59.999Z`);
+
   try {
-    const bookings = await Booking.find({ date });
+    const bookings = await Booking.find({
+      start_date: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    });
 
     if (bookings.length) {
       return res.send({ bookings });
