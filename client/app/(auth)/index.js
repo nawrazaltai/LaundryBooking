@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, setToken } from "../redux/features/user/userSlice";
-import { Link, router } from "expo-router";
+import { Link, router, Stack } from "expo-router";
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import InputField from "../../components/input/InputField";
 import CustomButton from "../../components/button/CustomButton";
@@ -21,13 +21,13 @@ import CustomButton from "../../components/button/CustomButton";
 const SignIn = () => {
   const dispatch = useDispatch();
   const { token, status } = useSelector((state) => state.user);
+  console.log("login", token);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
       await dispatch(loginUser({ username, password })).unwrap();
-      router.replace("/(tabs)");
     } catch (e) {
       if (e.error) {
         Alert.alert(e.error);
@@ -40,6 +40,11 @@ const SignIn = () => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaProvider>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+        />
         <SafeAreaView className="flex-1 w-full h-full bg-base">
           <View className="h-[30%] flex items-center">
             <View className="w-[65%]">

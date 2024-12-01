@@ -6,7 +6,7 @@ import { useFetchBookingsByUserId } from "../../../hooks/booking/useBookings";
 const Item = ({ item }) => {
   return (
     <View className="w-full p-5">
-      <Text>{item?.date}</Text>
+      <Text>{item?.start_date}</Text>
     </View>
   );
 };
@@ -16,7 +16,7 @@ const Upcoming = () => {
   const { data, error, isLoading } = useFetchBookingsByUserId(user_id);
 
   return (
-    <View className="py-2">
+    <View className="py-2 bg-white flex-1">
       <FlatList
         data={data?.bookings}
         renderItem={({ item }) => <Item item={item} />}

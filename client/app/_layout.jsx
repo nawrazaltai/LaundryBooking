@@ -26,6 +26,7 @@ NativeWindStyleSheet.setOutput({
 
 const InitialLayout = () => {
   const dispatch = useDispatch();
+  const [ready, setReady] = useState(false);
 
   const [fontsLoaded, error] = useFonts({
     Inter_100Thin,
@@ -37,17 +38,8 @@ const InitialLayout = () => {
     Inter_900Black,
   });
 
-  useEffect(() => {
-    if (fontsLoaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, error]);
-
-  // if (!fontsLoaded && !error) {
-  //   return null;
-  // }
-
-  const { user } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state) => state.user);
+  console.log("init layout", token);
 
   useEffect(() => {
     const fetchAuthData = async () => {
@@ -64,12 +56,14 @@ const InitialLayout = () => {
     };
 
     fetchAuthData();
+    setReady(true);
   }, [dispatch]);
 
-  if (!fontsLoaded && !error) {
+  if (!fontsLoaded && !error && ready) {
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size={"large"} color={"gray"} />
+        <Text className="font-interBold">LADDAR!!!!!</Text>
       </View>
     );
   }

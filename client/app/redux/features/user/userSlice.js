@@ -24,32 +24,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// export const getUser = createAsyncThunk(
-//   "users/userId",
-//   async (userId, thunkAPI) => {
-//     try {
-//       const token = await getData("token");
-
-//       if (!token) {
-//         return thunkAPI.rejectWithValue({ error: "Token not found" });
-//       }
-
-//       const response = await axios.get(`${API_URL}/user/${userId}`, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-
-//       //   const { user } = response.data;
-//       //   await storeData("token", token);
-//       //   await storeData("userData", user);
-//       return response.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.response.data);
-//     }
-//   }
-// );
-
 export const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -74,7 +48,6 @@ export const userSlice = createSlice({
       removeData("userData");
     },
     setToken: (state, action) => {
-      state.status = "loading";
       state.token = action.payload;
       state.status = "idle";
     },

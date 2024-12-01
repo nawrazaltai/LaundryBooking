@@ -6,10 +6,10 @@ import { useEffect } from "react";
 
 export default function TabLayout() {
   //   const dispatch = useDispatch();
-  const token = useSelector((state) => state?.user?.token);
+  const { token } = useSelector((state) => state?.user);
+  console.log("tabs layout", token);
 
   if (!token) {
-    console.log(token);
     return <Redirect href="/(auth)" />;
   }
 

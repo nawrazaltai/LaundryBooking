@@ -23,7 +23,7 @@ function MyTabs() {
 
 const _layout = () => {
   return (
-    <SafeAreaView className="flex-1 w-full bg-white pt-5">
+    <SafeAreaView className="flex-1 w-full bg-white">
       <View className="w-full flex justify-center items-center p-2">
         <Text className="font-interBold text-xl">Mina bokningar</Text>
       </View>
