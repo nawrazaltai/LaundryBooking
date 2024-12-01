@@ -8,24 +8,23 @@ const AuthLayout = () => {
   const dispatch = useDispatch();
 
   const { user, token } = useSelector((state) => state?.user);
-  console.log("auth layout", token);
 
-  useEffect(() => {
-    const fetchAuthData = async () => {
-      const storedToken = await getData("token");
-      const userData = await getData("userData");
+  // useEffect(() => {
+  //   const fetchAuthData = async () => {
+  //     const storedToken = await getData("token");
+  //     const userData = await getData("userData");
 
-      if (storedToken) {
-        dispatch(setToken(storedToken));
-      }
+  //     if (storedToken) {
+  //       dispatch(setToken(storedToken));
+  //     }
 
-      if (userData) {
-        dispatch(setUserData(userData));
-      }
-    };
+  //     if (userData) {
+  //       dispatch(setUserData(userData));
+  //     }
+  //   };
 
-    fetchAuthData();
-  }, [dispatch]);
+  //   fetchAuthData();
+  // }, [dispatch]);
 
   if (token) {
     return <Redirect href={"/(tabs)"} />;

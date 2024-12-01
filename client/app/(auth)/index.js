@@ -21,7 +21,6 @@ import CustomButton from "../../components/button/CustomButton";
 const SignIn = () => {
   const dispatch = useDispatch();
   const { token, status } = useSelector((state) => state.user);
-  console.log("login", token);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 

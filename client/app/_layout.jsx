@@ -39,7 +39,6 @@ const InitialLayout = () => {
   });
 
   const { user, token } = useSelector((state) => state.user);
-  console.log("init layout", token);
 
   useEffect(() => {
     const fetchAuthData = async () => {
