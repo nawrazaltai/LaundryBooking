@@ -10,12 +10,13 @@ import {
   Keyboard,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { loginUser, setToken } from "./redux/features/user/userSlice";
-import { Link, router } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import InputField from "../components/input/InputField";
-import CustomButton from "../components/button/CustomButton";
+import { useSelector, useDispatch } from "react-redux";
+import { loginUser, setToken } from "../redux/features/user/userSlice";
+import { Link, router } from "expo-router";
+// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import InputField from "../../components/input/InputField";
+import CustomButton from "../../components/button/CustomButton";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -23,15 +24,10 @@ const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    if (token) {
-      router.replace("/");
-    }
-  }, [token, router]);
-
   const handleLogin = async () => {
     try {
       await dispatch(loginUser({ username, password })).unwrap();
+      router.replace("/(tabs)");
     } catch (e) {
       if (e.error) {
         Alert.alert(e.error);
@@ -50,7 +46,7 @@ const SignIn = () => {
               <Image
                 resizeMode="contain"
                 className="h-full w-full shadow-sm shadow-gray-800"
-                source={require("../assets/washing-machine.png")}
+                source={require("../../assets/washing-machine.png")}
               />
             </View>
           </View>

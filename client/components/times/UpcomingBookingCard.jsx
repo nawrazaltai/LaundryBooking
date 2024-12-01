@@ -52,8 +52,8 @@ const UpcomingBookingCard = (booking) => {
   };
 
   return (
-    <View className="flex-row border border-gray-200 overflow-hidden rounded-lg h-[110px] bg-[#F9F9FC] shadow-lg shadow-gray-500 bg-white">
-      <View className="flex-col bg-[#F9F9FC] items-center border-r border-r-0.5 border-r-gray-300 justify-center px-5 bg-secondary">
+    <View className="flex-row border border-gray-200 overflow-hidden rounded-lg h-[110px] shadow-lg shadow-gray-500 bg-white">
+      <View className="flex-col items-center border-r border-r-0.5 border-r-gray-300 justify-center px-5 bg-secondary">
         <Text className="font-interSemi text-2xl text-white">
           {new Date(start_date).getDate()}
         </Text>

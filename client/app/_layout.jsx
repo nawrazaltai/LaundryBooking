@@ -48,7 +48,6 @@ const InitialLayout = () => {
   // }
 
   const { user } = useSelector((state) => state.user);
-  // console.log(user);
 
   useEffect(() => {
     const fetchAuthData = async () => {
@@ -78,13 +77,7 @@ const InitialLayout = () => {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen
-        name="profile"
-        options={{
-          animation: "slide_from_right",
-          presentation: "card",
-        }}
-      />
+      <Stack.Screen name="(auth)" />
       <Stack.Screen
         name="changePassword"
         options={{

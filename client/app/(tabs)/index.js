@@ -31,11 +31,10 @@ import UpcomingBookingCard from "../../components/times/UpcomingBookingCard";
 
 const Dashboard = () => {
   const statusBarHeight = StatBar.currentHeight + 15;
-  const { _id: user_id, firstName } = useSelector((state) => state.user.user);
+  const { _id: user_id, firstName } = useSelector((state) => state?.user?.user);
   const [nearestBooking, setNearestBooking] = useState(null);
 
   const { data, isLoading, error } = useFetchUpcomingBookings(user_id);
-  console.log(data);
 
   useEffect(() => {
     setNearestBooking(data?.bookings);
@@ -45,16 +44,14 @@ const Dashboard = () => {
     return (
       <UpcomingBookingCard
         item={item}
-        onPress={() => setSelectedId(item._id)}
+        onPress={() => setSelectedId(item?._id)}
         booking={item}
       />
     );
   };
-
   return (
     <SafeAreaProvider>
       <StatusBar style="auto" />
-
       <SafeAreaView
         className="flex-1 bg-primary"
         style={{
@@ -67,7 +64,6 @@ const Dashboard = () => {
             <Icon name="person-circle-outline" size={44} color={"#F5F5F5"} />
           </Link>
         </View>
-
         <View className="flex-1 bg-white rounded-t-2xl items-center">
           {!nearestBooking?.length && !isLoading ? (
             <View className="my-auto items-center">
@@ -79,7 +75,6 @@ const Dashboard = () => {
               <Text className="text-base font-interLight tracking-wider mt-[-35px]">
                 Du har inga bokade tvättider
               </Text>
-
               <Link href={"/times"} asChild>
                 <TouchableOpacity className="flex-row items-center justify-center mt-2.5 gap-x-2">
                   <Text className="text-accent text-lg font-interBold">
@@ -99,18 +94,17 @@ const Dashboard = () => {
                 <Text className="text-xl font-interBold">
                   Mina kommande tvättider
                 </Text>
-                <Link href={"/(bookings)"} asChild>
-                  <TouchableWithoutFeedback>
-                    <Text className="text-base font-interBold text-gray-700">
-                      Se alla
-                    </Text>
-                  </TouchableWithoutFeedback>
-                </Link>
+                {/* <Link href={"/(bookings)"} asChild> */}
+                <TouchableWithoutFeedback>
+                  <Text className="text-base font-interBold text-gray-700">
+                    Se alla
+                  </Text>
+                </TouchableWithoutFeedback>
+                {/* </Link> */}
               </View>
-
               <FlatList
                 data={nearestBooking}
-                keyExtractor={(b) => b._id}
+                keyExtractor={(b) => b?._id}
                 renderItem={renderItem}
                 contentContainerStyle={{
                   gap: 15,

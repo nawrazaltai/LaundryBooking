@@ -16,10 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { StatusBar } from "expo-status-bar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useForm, Controller } from "react-hook-form";
-import TextView from "../components/profile/TextView";
-import CustomButton from "../components/button/CustomButton";
-import CustomInput from "../components/input/CustomInput";
-import { logout } from "./redux/features/user/userSlice";
+import TextView from "../../components/profile/TextView";
+import CustomButton from "../../components/button/CustomButton";
+import CustomInput from "../../components/input/CustomInput";
+import { logout } from "../redux/features/user/userSlice";
 import { router, Link, useNavigation } from "expo-router";
 
 const ProfileHeader = ({ isValid, handleSubmit, onSubmit }) => {
@@ -72,7 +72,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    router.replace("/signIn");
+    // router.replace("/signIn");
   };
 
   return (

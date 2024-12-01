@@ -84,7 +84,7 @@ const ChangePassword = ({}) => {
 
   return (
     <SafeAreaView className="flex-1">
-      <KeyboardAvoidingView className="flex-1">
+      {/* <KeyboardAvoidingView className="flex-1">
         <View className="px-3">
           <View className="flex-row w-full justify-between items-center">
             <Text className="text-2xl font-bold">Hantera ditt lösenord</Text>
@@ -170,7 +170,7 @@ const ChangePassword = ({}) => {
             </View>
           </View>
         ) : null}
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingView> */}
     </SafeAreaView>
   );
 };
