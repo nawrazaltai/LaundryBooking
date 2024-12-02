@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Redirect, Slot, Stack } from "expo-router";
 import { Provider, useSelector } from "react-redux";
 import Store from "./redux/store";
@@ -24,6 +24,11 @@ NativeWindStyleSheet.setOutput({
   default: "native",
 });
 
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "(tabs)",
+};
+
 const InitialLayout = () => {
   const dispatch = useDispatch();
   const [ready, setReady] = useState(false);
@@ -38,9 +43,9 @@ const InitialLayout = () => {
     Inter_900Black,
   });
 
-  const { user, token } = useSelector((state) => state.user);
+  const { token, loading } = useSelector((state) => state?.user);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchAuthData = async () => {
       const storedToken = await getData("token");
       const userData = await getData("userData");
@@ -55,33 +60,33 @@ const InitialLayout = () => {
     };
 
     fetchAuthData();
-    setReady(true);
   }, [dispatch]);
 
-  if (!fontsLoaded && !error && ready) {
+  if (!fontsLoaded || error) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-primary">
         <ActivityIndicator size={"large"} color={"gray"} />
-        <Text className="font-interBold">LADDAR!!!!!</Text>
       </View>
     );
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack
+      screenOptions={{ headerShown: false }}
+      initialRouteName={unstable_settings.initialRouteName}
+    >
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen
+      <Stack.Screen name="signIn" />
+
+      {/* <Stack.Screen
         name="changePassword"
         options={{
           animation: "slide_from_bottom",
           // presentation: "modal",
         }}
-      />
+      /> */}
     </Stack>
   );
-
-  // <Slot />;
 };
 
 const queryClient = new QueryClient();

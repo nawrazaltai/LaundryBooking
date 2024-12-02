@@ -7,16 +7,17 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Image,
+  StatusBar,
   Keyboard,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser, setToken } from "../redux/features/user/userSlice";
-import { Link, router, Stack } from "expo-router";
+import { loginUser } from "./redux/features/user/userSlice";
+import { Link, Redirect, router, Stack } from "expo-router";
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import InputField from "../../components/input/InputField";
-import CustomButton from "../../components/button/CustomButton";
+import InputField from "../components/input/InputField";
+import CustomButton from "../components/button/CustomButton";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,11 @@ const SignIn = () => {
     }
   };
 
+  if (token) {
+    // return router.replace("/");
+    return <Redirect href={"/(tabs)"} />;
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaProvider>
@@ -50,7 +56,7 @@ const SignIn = () => {
               <Image
                 resizeMode="contain"
                 className="h-full w-full shadow-sm shadow-gray-800"
-                source={require("../../assets/washing-machine.png")}
+                source={require("../assets/washing-machine.png")}
               />
             </View>
           </View>

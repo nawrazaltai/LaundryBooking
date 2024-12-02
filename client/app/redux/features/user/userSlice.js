@@ -37,6 +37,7 @@ export const userSlice = createSlice({
     token: null,
     status: "idle",
     error: null,
+    loading: null,
   },
   reducers: {
     logout: (state) => {
@@ -48,7 +49,9 @@ export const userSlice = createSlice({
       removeData("userData");
     },
     setToken: (state, action) => {
+      state.loading = true;
       state.token = action.payload;
+      state.loading = false;
       state.status = "idle";
     },
     setUserData: (state, action) => {

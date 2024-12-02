@@ -12,7 +12,7 @@ const Item = ({ item }) => {
 };
 
 const Upcoming = () => {
-  const { _id: user_id } = useSelector((state) => state.user.user);
+  const { _id: user_id } = useSelector((state) => state?.user?.user);
   const { data, error, isLoading } = useFetchBookingsByUserId(user_id);
 
   return (
